@@ -6,15 +6,15 @@
 
 		<title>reveal.js - The HTML Presentation Framework</title>
 
-		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-		<meta name="author" content="Hakim El Hattab">
+		<meta name="description" content="Java 8 - The Good Stuff!">
+		<meta name="author" content="Mark Harrison">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="reveal.js/css/reveal.css">
 		<link rel="stylesheet" href="reveal.js/css/theme/default.css" id="theme">
 
 		<!-- For syntax highlighting -->
@@ -22,13 +22,11 @@
 
 		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
 		<script>
-			if( window.location.search.match( /print-pdf/gi ) ) {
-				var link = document.createElement( 'link' );
-				link.rel = 'stylesheet';
-				link.type = 'text/css';
-				link.href = 'reveal.js/css/print/pdf.css';
-				document.getElementsByTagName( 'head' )[0].appendChild( link );
-			}
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
 
 		<!--[if lt IE 9]>
@@ -43,301 +41,486 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>HTML Presentations Made Easy</h3>
+					<h1>Java 8 - The Good Stuff</h1>
+					<h3>Lambdas, Streams, Optional...</h3>
 					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
+						<small>Created by <a href="https://github.com/markglh">Mark Harrison</a> / <a href="http://twitter.com/markglh">@markglh</a></small>
 					</p>
 				</section>
 
-				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is a framework for easily creating beautiful presentations using HTML. You'll need a browser with
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-
-					<aside class="notes">
-						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
-					</aside>
-				</section>
-
-				<!-- Example of nested vertical slides -->
 				<section>
 					<section>
-						<h2>Vertical Slides</h2>
-						<p>
-							Slides can be nested inside of other slides,
-							try pressing <a href="#" class="navigate-down">down</a>.
+						<h2>Lambdas you say?</h2>
+						<ul>
+	         				<li>Basically just a shorthand method implementation</li>
+	         				<li>Concise and <em>much</em> improved replacement for Anonymous inner classes</li>
+	         				<li>Makes it easy to pass <em>behaviour</em> around</li>
+	          				<li>Pass the behaviour into the method, flips the design on its head</li>
+	          				<li>Lexically scoped (<code>this</code> is effectively shared with the surrounding method)</li>
+	          				<li><em>Almost</em> closures</li>
+	          			</ul>
 						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Lexical scoping - effectively recognises the scope of the surrounding method.</li>
+	          					<li>“this” doesn’t refer to the lambda itself (as it would have with anonymous classes).</li>
+	          					<li>lambdas can access the variables of the surrounding method (making them closures, almost)</li>
+	          					<li>One caveat here is that the variables must be effectively final, they don’t need to have the final keyword, but the compiler will verify that they aren’t re-assigned.</li>
+	          					<li>good performance, better than scala (sorry!)</li>
+	          				</ul>
+	          			</aside>
 					</section>
+
 					<section>
-						<h2>Basement Level 1</h2>
-						<p>Press down or up to navigate.</p>
+						<h2>Syntax please!</h2>
+
+						<pre><code data-trim class="java">
+(int x, int y)   ->   x + y
+	          			</code></pre>
+	          			</br>
+
+	          			<p>Argument types can be inferred by the compiler:</p>
+	          			<pre><code data-trim class="java">
+(x, y)   ->   x + y
+	          			</code></pre>
+
+	          			</br>
+
+						<p>Zero-arg Lambdas are also possible:</p>
+	          			<pre><code data-trim class="java">
+()   ->   "Java 8!"
+	          			</code></pre>
+	          			</br>
+
+						<p>But how can we use them?</p>
+						<pre class="fragment fade-in" ><code data-trim class="java">
+Consumer&lt;String&gt; inferredConsumer = x -> System.out.println(x);
+	          			</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Multiple arguments need to be in parentheses</li>
+	          					<li>The types can be inferred when mapping to the FunctionalInterface</li>
+	          					<li>Can wrap large Lambdas in parenthesis but you should really use method references instead</li>
+	          				</ul>
+	          			</aside>
 					</section>
+
 					<section>
-						<h2>Basement Level 2</h2>
-						<p>Cornify</p>
-						<a class="test" href="http://cornify.com">
-							<img width="280" height="326" src="https://s3.amazonaws.com/hakim-static/reveal-js/cornify.gif" alt="Unicorn">
-						</a>
+						<h2>WAT?!?</h2>
+						<img src="images/watcat.jpg"/>
 					</section>
+
 					<section>
-						<h2>Basement Level 3</h2>
-						<p>That's it, time to go back up.</p>
-						<a href="#/2" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="-webkit-transform: rotate(180deg);">
-						</a>
+						<h2>Functional Interfaces</h2>
+						<ul>
+							<li>A Functional Interface is any interface with <em>one</em> <strong>S</strong>ingle <strong>A</strong>bstract <strong>M</strong>ethod</li>
+							<li class="fragment fade-in">The parameters that the Lambda accepts and returns must match the interface (incuding exceptions)</li>
+							<li class="fragment fade-in"><code>@FunctionalInterface</code> annotation is provided to highlight these interfaces, it is just a marker though, any <em>SAM</em> interface will work - the annotation simply enforces this at compile time</li>
+						</ul>
+						</ul>
+						</br></br>
+						<ul class="fragment fade-in">
+							<li>So... When we pass or assign a Lambda:
+								<ol>
+									<li>First the Lambda is converted into a Functional Interface</li>
+									<li>Secondly it is invoked via this generated implementation</li>
+								</ol>	
+							</li>
+						</ul>						
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>A @FunctionalInterface has one (non default) method. </li>
+	          					<li>Inference is used to try to match the interface to the lambda</li>
+	          					<li>The annotation is just a marker, it isn't required for it to work, any interface with just one method is considered a functional interface!</li>
+	          					<li>However, if the interface has more than one (non-default) method the annotation prevents it from compiling.</li>
+	          					<li>Fully backwards compatible.</li>
+	          					<li>A Lambda can replace any variable or parameter that expects a SAM interface</li>
+	          					<li>The java.util.function package contains lots of <code>@FunctionalInterface</code> definitions</li>
+	          					<li>Downside: Lots of different interfaces with different names (couldn’t do it like C# because of type erasure)</li>
+	          				</ul>
+	          			</aside>
 					</section>
-				</section>
 
-				<section>
-					<h2>Slides</h2>
-					<p>
-						Not a coder? No problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slid.es" target="_blank">http://slid.es</a>.
-					</p>
-				</section>
+					<section>
+						<h2>Lambda Example 1 - Predicates</h2>
+						<p>Have you ever written code like this?</p>
 
-				<section>
-					<h2>Point of View</h2>
-					<p>
-						Press <strong>ESC</strong> to enter the slide overview.
-					</p>
-					<p>
-						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
-					</p>
-				</section>
-
-				<section>
-					<h2>Works in Mobile Safari</h2>
-					<p>
-						Try it out! You can swipe through the slides and pinch your way to the overview.
-					</p>
-				</section>
-
-				<section>
-					<h2>Marvelous Unordered List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-						## Markdown support
-
-						For those of you who like that sort of thing. Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-
-						```
-						<section data-markdown>
-						  ## Markdown support
-
-						  For those of you who like that sort of thing.
-						  Instructions and a bit more info available [here](https://github.com/hakimel/reveal.js#markdown).
-						</section>
-						```
-					</script>
-				</section>
-
-				<section id="transitions">
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like: <br>
-						<a href="?transition=cube#/transitions">Cube</a> -
-						<a href="?transition=page#/transitions">Page</a> -
-						<a href="?transition=concave#/transitions">Concave</a> -
-						<a href="?transition=zoom#/transitions">Zoom</a> -
-						<a href="?transition=linear#/transitions">Linear</a> -
-						<a href="?transition=fade#/transitions">Fade</a> -
-						<a href="?transition=none#/transitions">None</a> -
-						<a href="?#/transitions">Default</a>
-					</p>
-				</section>
-
-				<section id="themes">
-					<h2>Themes</h2>
-					<p>
-						Reveal.js comes with a few themes built in: <br>
-						<a href="?#/themes">Default</a> -
-						<a href="?theme=sky#/themes">Sky</a> -
-						<a href="?theme=beige#/themes">Beige</a> -
-						<a href="?theme=simple#/themes">Simple</a> -
-						<a href="?theme=serif#/themes">Serif</a> -
-						<a href="?theme=night#/themes">Night</a> <br>
-						<a href="?theme=moon#/themes">Moon</a> -
-						<a href="?theme=solarized#/themes">Solarized</a>
-					</p>
-					<p>
-						<small>
-							* Theme demos are loaded after the presentation which leads to flicker. In production you should load your theme in the <code>&lt;head&gt;</code> using a <code>&lt;link&gt;</code>.
-						</small>
-					</p>
-				</section>
-
-				<section>
-					<h2>Global State</h2>
-					<p>
-						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-						will be added as a class to the document element when the slide is open. This lets you
-						apply broader style changes, like switching the background.
-					</p>
-				</section>
-
-				<section data-state="customevent">
-					<h2>Custom Events</h2>
-					<p>
-						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
-					</p>
-					<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-					</code></pre>
-				</section>
-
-				<section>
-					<section data-background="#007777">
-						<h2>Slide Backgrounds</h2>
-						<p>
-							Set <code>data-background="#007777"</code> on a slide to change the full page background to the given color. All CSS color formats are supported.
-						</p>
-						<a href="#" class="image navigate-down">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
-						<h2>Image Backgrounds</h2>
-						<pre><code>&lt;section data-background="image.png"&gt;</code></pre>
-					</section>
-					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" data-background-repeat="repeat" data-background-size="100px">
-						<h2>Repeated Image Backgrounds</h2>
-						<pre><code style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
-					</section>
-				</section>
-
-				<section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
-					<h2>Background Transitions</h2>
-					<p>
-						Pass reveal.js the <code>backgroundTransition: 'slide'</code> config argument to make backgrounds slide rather than fade.
-					</p>
-				</section>
-
-				<section data-transition="linear" data-background="#8c4738" data-background-transition="slide">
-					<h2>Background Transition Override</h2>
-					<p>
-						You can override background transitions per slide by using <code>data-background-transition="slide"</code>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Pretty Code</h2>
-					<pre><code data-trim contenteditable>
-function linkify( selector ) {
-  if( supports3DTransforms ) {
-
-    var nodes = document.querySelectorAll( selector );
-
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
-
-      if( !node.className ) {
-        node.className += ' roll';
-      }
-    }
-  }
+						<pre><code data-trim class="java">
+@FunctionalInterface  //Added in Java8 
+public interface Predicate&lt;T&gt; {
+	boolean test(T t); 
+	
 }
-					</code></pre>
-					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>
 
-				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,
-						<a href="#/2/3">like this</a>.
-					</p>
-				</section>
+private void printAllPeopleMatchingPredicate(List&lt;Person&gt; people, 
+                                             Predicate&lt;Person&gt; predicate) {
+    for (Person person : people) {
+        if (predicate.test(person)) {
+           System.out.println(person);
+        }
+    }
+}						
+						</code></pre>
 
-				<section>
-					<section id="fragments">
-						<h2>Fragmented Views</h2>
-						<p>Hit the next arrow...</p>
-						<p class="fragment">... to step through ...</p>
-						<ol>
-							<li class="fragment"><code>any type</code></li>
-							<li class="fragment"><em>of view</em></li>
-							<li class="fragment"><strong>fragments</strong></li>
-						</ol>
-
-						<aside class="notes">
-							This slide has fragments which are also stepped through in the notes window.
-						</aside>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Predicate pattern, rather than hard coding the "if" statement</li>
+	          				</ul>
+	          			</aside>
 					</section>
+
 					<section>
-						<h2>Fragment Styles</h2>
-						<p>There's a few styles of fragments, like:</p>
-						<p class="fragment grow">grow</p>
-						<p class="fragment shrink">shrink</p>
-						<p class="fragment roll-in">roll-in</p>
-						<p class="fragment fade-out">fade-out</p>
-						<p class="fragment highlight-red">highlight-red</p>
-						<p class="fragment highlight-green">highlight-green</p>
-						<p class="fragment highlight-blue">highlight-blue</p>
-						<p class="fragment current-visible">current-visible</p>
-						<p class="fragment highlight-current-blue">highlight-current-blue</p>
+						<h2>Lambda Example 1 - Predicates</h2>
+
+						<p>Pre Java 8:</p>
+
+						<pre><code data-trim class="java">
+class PersonOlderThan50Predicate implements Predicate&lt;Person&gt; {
+    public boolean test(Person person) {
+        return person.getAge() >= 50;
+    }
+}
+
+printAllPeopleMatchingPredicate(loadsOfPeople, 
+                                new PersonOlderThan50Predicate());
+	          			</code></pre>
+	          			</br>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Need to implement a predicate for each different test</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Lambda Example 1 - Predicates</h2>
+
+						<p>Java 8:</p>
+
+						<pre><code data-trim class="java">
+printAllPeopleMatchingPredicate(loadsOfPeople, x -> x.getAge() > 50); 
+	          			</code></pre>
+	          			<p>Notice the signature matches that of the Predicate, the compiler automatically figures out the rest</p>
+	          			</br>
+
+	          			
+		          		<p>What if we had an existing <code>Predicate</code> we wanted to enhance?</p>
+		          		<div class="fragment fade-in">
+		          			<pre><code data-trim class="java">
+Predicate&lt;Person&gt; ageCheck = x -> x.getAge() > 50;
+printAllPeopleMatchingPredicate(loadsOfPeople, 
+                                ageCheck.and(x -> x.getIq() >100));
+		          			</code></pre>
+		          			<p>Composite <code>Predicates</code> FTW... :-)</p>
+	          			</div>
+
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Could pass another function in to execute on each element</li>
+	          					<li>Execute around pattern</li>
+	          					<li>Could use method references instead</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Lambda Example 2 - Runnable</h2>
+
+						<p>Pre Java 8 mess:</p>
+
+						<pre><code data-trim class="java">
+Runnable r1 = new Runnable() {
+    @Override
+    public void run() {
+         System.out.println("Meh!");
+    }
+};
+r1.run();
+	          			</code></pre>
+
+	          			</br>
+						<p>Java 8:</p>
+
+						<pre><code data-trim class="java">
+Runnable r = () -> System.out.println("Woop!");
+r.run();
+	          			</code></pre>
+					</section>
+
+					<section>
+						<h2>Lambda Example 3 - Collections</h2>
+
+						<p>Lambdas make lots of new Collection methods possible...</p>
+
+						<pre><code data-trim class="java">
+List&lt;String&gt; strings = new ArrayList&lt;&gt;();
+Collections.addAll(strings, "Java", "7", "FTW");
+	          			</code></pre>
+	          			
+	          			<div class="fragment fade-in">
+	          			<p>Do <em>something</em> on every element in the List</p>
+	          			<pre><code data-trim class="java">
+strings.forEach(x -> System.out.print(x + " ")); 
+//Prints: "Java 7 FTW"
+	          			</code></pre>
+	          			</div>
+	          			
+	          			<div class="fragment fade-in">
+	          			<p>Replace every matching element in the List</p>
+	          			<pre><code data-trim class="java">
+strings.replaceAll(x -> x == "7" ? "8" : x); 
+strings.forEach(x -> System.out.print(x + " "));
+//Prints: "Java 8 FTW"
+	          			</code></pre>
+	          			</div>
+
+						<div class="fragment fade-in">
+	          			<p>Remove matching elements from the List</p>
+	          			<pre><code data-trim class="java">
+strings.removeIf(x -> x == "8");
+strings.forEach(x -> System.out.print(x + " "));
+//Prints: Java FTW
+	          			</code></pre>
+	          			</div>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>This sets us up for streams later</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Lambda Example 4 - Comparators</h2>
+
+						<pre><code data-trim class="java">
+@FunctionalInterface //Added in Java8 version
+public interface Comparator&lt;T&gt; {
+	int compare(T o1, T o2);
+	//Java 8 adds loads of default methods...
+}
+						</code></pre>
+
+						<p>Pre Java 8:</p>
+
+						<pre><code data-trim class="java">
+class SortByPersonAge implements Comparator&lt;Person&gt; {
+    public int compare(Person p1, Person p2) {
+        return p1.getAge() - p2.getAge();
+    }
+}
+
+List&lt;Person&gt; loadsOfPeople = ...;
+Collections.sort(loadsOfPeople, new SortByPersonAge());
+
+	          			</code></pre>
+
+	          			<div class="fragment fade-in">
+	          			<p>Java 8:</p>
+
+						<pre><code data-trim class="java">
+Collections.sort(loadsOfPeople, (p1, p2) -> p1.getAge() - p2.getAge());
+	          			</code></pre>
+	          			</div>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Multiple arguments need to be in parenthesis</li>
+	          					<li>The types can be inferred when mapping to the FunctionalInterface</li>
+	          				</ul>
+	          			</aside>
 					</section>
 				</section>
 
 				<section>
-					<h2>Spectacular image!</h2>
-					<a class="image" href="http://lab.hakim.se/meny/" target="_blank">
-						<img width="320" height="299" src="http://s3.amazonaws.com/hakim-static/portfolio/images/meny.png" alt="Meny">
-					</a>
+						<h2>Lambda Example 4 - Comparators</h2>
+
+						<p>As usual in Java 8... the <code>Comparator</code> interface provides plenty of useful default &amp; static methods...</p>
+			
+						<pre><code data-trim class="java">
+//comparing static method simplifies creating Comparators
+Comparator&lt;Person&gt; newComparator = Comparator.comparing(e -> e.getIq());
+						</code></pre>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+//thenComparing allows composite comparators to be easily created
+Collections.sort(loadsOfPeople, 
+                 newComparator.thenComparing(
+                               Comparator.comparing(e -> e.getIq())));
+						</code></pre>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+//More useful Collection methods...
+loadsOfPeople4.sort(Comparator.comparing(e -> e.getIq()));
+						</code></pre>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+//And finally... Method references (I'll explain this soon!)
+loadsOfPeople.sort(Comparator.comparing(Person::getAge));
+						</code></pre>
+
+	          			
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Multiple arguments need to be in parenthesis</li>
+	          					<li>The types can be inferred when mapping to the FunctionalInterface</li>
+	          				</ul>
+	          			</aside>
+					</section>
 				</section>
 
 				<section>
-					<h2>Export to PDF</h2>
-					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, below is an example that's been uploaded to SlideShare.</p>
-					<iframe id="slideshare" src="http://www.slideshare.net/slideshow/embed_code/13872948" width="455" height="356" style="margin:0;overflow:hidden;border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen> </iframe>
-					<script>
-						document.getElementById('slideshare').attributeName = 'allowfullscreen';
-					</script>
+					<section>
+						<h2>Introducing Method References</h2>
+						<ul>
+							<li>Any method can be automatically “lifted” into a function. It must simply meet contract of the FunctionalInterface</li>
+	          				<li>Can be easier to debug &amp; test than Lambdas, more descriptive stack traces</li>
+	          				<li>Promotes re-use, keeping code <em>DRY</em></li>
+	          				<li>Uses the &quot;<em>::</em>&quot; syntax</li>
+	          			</ul>
+						
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Decision needs to be made on a case by case basis</li>
+	          					<li>Generally method references are more readable and certainly more re-usable</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Method References Types</h2>
+	          			<table>
+							<thead>
+								<tr>
+									<th>Reference to...</th>
+									<th>Example</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+								 	<td>a static method</td>
+								 	<td><code class="java">Class::staticMethodName</code></td> 
+								</tr>
+								<tr>
+									<td>an instance method of a <strong>specific</strong> object</td>
+									<td><code class="java">Object::instanceMethodName</code></td> 
+								</tr>
+								<tr>
+									<td>an instance method of an <strong>arbitrary</strong> object</td>
+									<td><code class="java">Class::methodName</code></td> 
+								</tr>
+								<tr>
+									<td>a constructor</td>
+									<td><code class="java">ClassName::new</code></td> 
+								</tr>
+							</tbody>
+						</table>
+					</section>
+
+					<section>
+						<h2>Reference to a static method</h2>
+						<p>A simple reference to a static method</p>
+						<pre><code data-trim class="java">
+//isPersonOlderThan50 is a static method on the PersonPredicates class
+printAllPeopleMatchingPredicate(loadsOfPeople, 
+                                PersonPredicates::isPersonOlderThan50);
+						</code></pre>
+	          			</br>
+
+	          			<p>This is equivalent to</p>
+	          			<pre><code data-trim class="java">
+printAllPeopleMatchingPredicate(loadsOfPeople, x -> x.getAge() > 50);
+						</code></pre>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>...</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Reference to an instance method of a specific object</h2>
+						<p>A reference to a method on an object instance</p>
+						<pre><code data-trim class="java">
+List&lt;String&gt; strings = ...
+//print is a method on the "out" PrintStream object
+strings.forEach(System.out::print);
+						</code></pre>
+	          			</br>
+
+	          			<p>This is equivalent to</p>
+	          			<pre><code data-trim class="java">
+strings.forEach(x -> System.out.print(x));
+						</code></pre>
+						
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Useful for saving a few characters but not the most widely used type</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Reference to an instance method of an arbitrary object</h2>
+						<p>Although it looks like we're referencing a Class method, we're invoking an instance method on the object(s) passed in the call</p>
+						<pre><code data-trim class="java">
+public interface Function&lt;T,R&gt; {
+	public R apply(T t);
+}
+
+public static &lt;T, R&gt; List&lt;R&gt; map(Function&lt;T, R&gt; function, List&lt;T&gt; source) {
+        //applies the function to each element, converting it from T to R
+}
+						</code></pre>
+						<pre><code data-trim class="java">
+List&lt;Person&gt; loadsOfPeople = ...
+List&lt;Integer&gt; namesOfPeople = map(Person::getAge, loadsOfPeople);
+						</code></pre>
+	          			</br>
+
+	          			<p>This is equivalent to</p>
+	          			<pre><code data-trim class="java">
+List&lt;Integer&gt; namesOfPeople = map(person -> person.getAge(), loadsOfPeople);
+						</code></pre>
+						
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Useful for saving a few characters but not the most widely used type</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Reference to a constructor</h2>
+						<p>Uses the constructor to create new objects, the constructor signature must match that of the FunctionalInterface</p>
+						<pre><code data-trim class="java">
+List&lt;String&gt; digits = Arrays.asList("1", "2", "3", "4", "5");
+						</code></pre>
+						<pre><code data-trim class="java">
+//Transforms a String into an Integer using the default Integer constructor
+List&lt;Integer&gt; numbers = map(Integer::new, digits);
+						</code></pre>
+	          			</br>
+
+	          			<p>This is equivalent to</p>
+	          			<pre><code data-trim class="java">
+List&lt;Integer&gt; numbers2 = map(s -> new Integer(s), digits);
+						</code></pre>
+						
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Anytime you're simply creating a new object you may be able to swap the lambda for a constructor method reference</li>
+	          				</ul>
+	          			</aside>
+					</section>
 				</section>
 
-				<section>
-					<h2>Take a Moment</h2>
-					<p>
-						Press b or period on your keyboard to enter the 'paused' mode. This mode is helpful when you want to take distracting slides off the screen
-						during a presentation.
-					</p>
-				</section>
+
+
 
 				<section>
 					<h2>Stellar Links</h2>
@@ -358,7 +541,7 @@ function linkify( selector ) {
 		</div>
 
 		<script src="reveal.js/lib/js/head.min.js"></script>
-		<script src="reveal.js/js/reveal.min.js"></script>
+		<script src="reveal.js/js/reveal.js"></script>
 
 		<script>
 
@@ -371,7 +554,7 @@ function linkify( selector ) {
 				center: true,
 
 				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'fade', // default/cube/page/concave/zoom/linear/fade/none
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
 				// Parallax scrolling
 				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
