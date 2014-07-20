@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>reveal.js - The HTML Presentation Framework</title>
+		<title>Java 8 - The Good Stuff</title>
 
 		<meta name="description" content="Java 8 - The Good Stuff!">
 		<meta name="author" content="Mark Harrison">
@@ -262,29 +262,29 @@ Collections.addAll(strings, "Java", "7", "FTW");
 	          			</code></pre>
 	          			
 	          			<div class="fragment fade-in">
-	          			<p>Do <em>something</em> on every element in the List</p>
-	          			<pre><code data-trim class="java">
+		          			<p>Do <em>something</em> on every element in the List</p>
+		          			<pre><code data-trim class="java">
 strings.forEach(x -> System.out.print(x + " ")); 
 //Prints: "Java 7 FTW"
-	          			</code></pre>
+		          			</code></pre>
 	          			</div>
 	          			
 	          			<div class="fragment fade-in">
-	          			<p>Replace every matching element in the List</p>
-	          			<pre><code data-trim class="java">
+		          			<p>Replace every matching element in the List</p>
+		          			<pre><code data-trim class="java">
 strings.replaceAll(x -> x == "7" ? "8" : x); 
 strings.forEach(x -> System.out.print(x + " "));
 //Prints: "Java 8 FTW"
-	          			</code></pre>
+		          			</code></pre>
 	          			</div>
 
 						<div class="fragment fade-in">
-	          			<p>Remove matching elements from the List</p>
-	          			<pre><code data-trim class="java">
+		          			<p>Remove matching elements from the List</p>
+		          			<pre><code data-trim class="java">
 strings.removeIf(x -> x == "8");
 strings.forEach(x -> System.out.print(x + " "));
 //Prints: Java FTW
-	          			</code></pre>
+		          			</code></pre>
 	          			</div>
 
 	          			<aside class="notes">
@@ -320,11 +320,11 @@ Collections.sort(loadsOfPeople, new SortByPersonAge());
 	          			</code></pre>
 
 	          			<div class="fragment fade-in">
-	          			<p>Java 8:</p>
+		          			<p>Java 8:</p>
 
-						<pre><code data-trim class="java">
-Collections.sort(loadsOfPeople, (p1, p2) -> p1.getAge() - p2.getAge());
-	          			</code></pre>
+							<pre><code data-trim class="java">
+	Collections.sort(loadsOfPeople, (p1, p2) -> p1.getAge() - p2.getAge());
+		          			</code></pre>
 	          			</div>
 
 	          			<aside class="notes">
@@ -519,21 +519,578 @@ List&lt;Integer&gt; numbers2 = map(s -> new Integer(s), digits);
 					</section>
 				</section>
 
-
-
-
 				<section>
-					<h2>Stellar Links</h2>
-					<ul>
-						<li><a href="http://slid.es">Try the online editor</a></li>
-						<li><a href="https://github.com/hakimel/reveal.js">Source code on GitHub</a></li>
-						<li><a href="http://twitter.com/hakimel">Follow me on Twitter</a></li>
-					</ul>
+				    <section>
+						<h2>What's wrong with Collections</h2>
+						<ul>
+							<li>Every application uses Collections, however Collections are difficult to query and aggregate, requiring several levels of iteration and conditionals, basically it’s messy and painful</li>
+							<li>Writing multi-threaded code to do this manually is difficult to write and maintain</li>
+							<li>What we want is to execute a SQL like query on the collection to return a useful set of data</li>
+						</ul>
+
+						</br></br>
+						<div class="fragment fade-in">
+							<p>Imagine writing this manually</p>
+							<pre><code data-trim class="java">
+Stream&lt;String&gt; words = Stream.of("Java", "8", "FTW");
+Map&lt;String, Long&gt; letterToNumberOfOccurrences =
+    words.map(w -> w.split(""))
+            .flatMap(Arrays::stream)
+            .collect(Collectors.groupingBy(
+                                Function.identity(), 
+                                Collectors.counting()));
+//Prints: //{a=2, T=1, F=1, v=1, W=1, 8=1, J=1}
+							</code></pre>
+						</div>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Introducing Streams!</h2>
+						<ul>
+							<li>A <code>Stream</code> is a conceptually fixed data structure in which elements are computed on demand</li>
+							<li>Streams iterate internally, you don’t have to worry about handling the iteration</li>
+							<li>Pipelining: Akin to the “pipe” command in unix, allowing aggregations to be chained together</li>
+							<li>Automatic optimisation: <em>short-circuiting</em> and <em>lazy</em> processing</li>
+							<li>Can be infinite</li>
+							<li>Can be executed in parallel automatically using <code>parallelStream</code> or <code>paralell()</code></li>
+						</ul>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Streams are wrappers around data sources</li>
+	          					<li>Different to a List, which is an in memory data structure where every element has to be computed before it can be added</li>
+								<li>Short circuiting allows the stream to end processing as soon as the result is obtained</li>
+								<li>Loop fusion (fusing results together to process each one at a time rather than waiting for the whole set to pass through the intermediate operation)</li>
+								<li>Lazy processing means that nothing is done until a terminal command is executed, the most efficient sequence of operations is then calculated and invoked</li>
+								<li>Data can come from various sources (Collections, Arrays, IO)</li>
+								<li>Don't modify the original list</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>More Streams...</h2>
+						
+						<ul>
+							<p>Can be created from multiple sources:</p>
+							<li><code>Arrays.stream(...)</code>, <code>Stream.of(1, 2, 3, 4)</code>, <code>Stream.iterate(...)</code>, <code>Stream.range(...)</code>, <code>Random.ints()</code>, <code>Files.lines(...)</code>...</li>
+						
+						</br>
+							<p>Two types of operations:</p>
+							<li><strong>Intermediate (aggregation):</strong> filter, map, flatMap, sorted ... </li>
+							<li><strong>Terminal:</strong> collect, reduce, forEach, findAny ...</li>
+
+						</br>
+							<p>Specialised Streams:</p>
+							<li>IntStream, LongStream and DoubleStream: better performance for those unboxed types</li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Nothing happens until a terminal operation is called (lazy)</li>
+								<li>The aggregation operations are then invoked as efficiently as possible</li>
+								<li>Annoyances casting between typed streams: Steam<Int> and IntSteam</Int>
+								<li>Be careful with boxing!!! Iterate not as efficient with parallel as rangeClosed (fixed number of results so can split ahead of time)</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>map</h2>
+
+						<pre><code data-trim class="java">
+public &lt;R&gt; Stream&lt;R&gt; map(Function&lt;T, R&gt; mapper)
+						</code></pre>
+
+						</br>
+
+						<p>The <code>mapper</code> Function converts each element from <code>T</code> to <code>R</code>. The result is then added, as is, to the <code>Stream</code></p>					
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Slightly simplified definition (removed crazy generics)</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>flatMap</h2>
+
+						<pre><code data-trim class="java">
+public &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;T, Stream&lt;R&gt;&gt; mapper)
+						</code></pre>
+
+						</br>
+
+						<ul>
+							<li>The <code>mapper</code> Function converts each element from <code>T</code> to a <strong><code>Stream</code></strong> of <code>R</code></li>
+							<li>This is the key difference to <code>map</code>, the function itself returns a <code>Stream</code> rather than one element</li>		
+							<li>This <code>Stream</code> is then <em>flattened</em> (merged) into the main <code>Stream</code></li>	
+						</ul>
+						</br></br>
+
+						<p class="fragment fade-in">To put it another way: flatMap lets you replace each value of a Stream with another Stream, and then it concatenates all the generated streams into one single stream</p>	
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Slightly simplified definition (removed crazy generics)</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>reduce</h2>
+
+						<pre><code data-trim class="java">
+public T reduce(T identity, BinaryOperator&lt;T&gt; accumulator);
+public Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator);
+
+//This is the function contained in BinaryOperator
+R apply(T t, U u);
+						</code></pre>
+
+						<ul>
+							<li>Normally used on combination with map</li>
+							<li>Takes a <code>Stream</code> of values and repeatedly applies the accumulator to reduce them into a single value</li>
+							<li>The accumulator is passed the total so far (<code>T</code>) and the current element (<code>U</code>)</li>
+							<li>If passed, <code>identity</code> provides the initial value, rather than the first element</li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>More on optional later</li>
+	          					<li>count, min, max, average</li>
+	          					<li>Could use collectors for a lot of reduce aggregations, such as “summing”, or “counting” to count elements</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>reduce continued...</h2>
+
+						<pre><code data-trim class="java">
+loadsOfPeople.stream().
+map(Person::getAge). //lets assume 3 elements: 5, 10 ,15
+reduce(0, (total, current) -> total + current);
+						</code></pre>
+
+						<ul>
+							<li class="fragment fade-in">First we map the <code>Person</code> to the age <code>int</code></li>
+							<li class="fragment fade-in">reduce then starts at <code>0</code>, and adds the current element, <code>5</code></li>
+							<li class="fragment fade-in">reduce continues by adding the current total <code>5</code>, to the next element, <code>10</code></li>
+							<li class="fragment fade-in">finally reduce adds the current total <code>15</code>, to the next element <code>15</code></li>
+							<li class="fragment fade-in">Tada, we've added up all the ages: <code>30!</code></li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>That's just the tip of the iceburg</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>collectors</h2>
+
+						<p>The collect method is a terminal operation which takes various &quot;recipes&quot;, called <code>Collectors</code> for accumulating the elements of a stream into a summary result, or converting to a specific type (such as a <code>List</code>)</p>
+
+						<pre><code data-trim class="java">
+List&lt;String&gt; listOfStrings = loadsOfPeople.stream()
+             .map(x -> x.getName())
+             .collect(Collectors.toList());
+
+Map&lt;Integer, List&lt;Person&gt;&gt; ageToPersonMap = 
+                loadsOfPeople.stream().
+                collect(Collectors.groupingBy(Person::getAge));
+						</code></pre>
+
+						<ul class="fragment fade-in">
+							<li>The argument passed to collect is an object of type java .util.stream.Collector</li>
+							<li>It describes how to accumulate the elements of a stream into a final result</li>
+							<li>Can be used for <code>Grouping</code>, <code>Partitioning</code>, <code>Averaging</code>, ...</li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Plenty of examples soon</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+
+					<section>
+						<h2>Streams Example 1</h2>
+
+						<pre><code data-trim class="java">
+List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
+List&lt;Integer&gt; twoEvenSquares =
+    numbers.stream()
+            .filter(n -> {//Filter out any odd numbers
+                System.out.println("filtering " + n);
+                return n % 2 == 0;
+            })
+            .map(n -> {//Multiply by itself
+                System.out.println("mapping " + n);
+                return n * n;
+            })
+            .limit(2)//Limit to two results
+            .collect(Collectors.toList()); //Finish and convert to a List
+						</code></pre>
+
+<p>And the results...</p>
+						<pre><code data-trim class="java">
+filtering 1
+filtering 2
+mapping 2
+filtering 3
+filtering 4
+mapping 4
+
+twoEvenSquares = List[4, 16] 
+						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Notice we finish processing as soon as we have two results (short-circuiting)</li>
+	          					<li>the filtering and mapping methods are merged together (made possible by lazy evaluation) </li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 2</h2>
+
+						<pre><code data-trim class="java">
+List&lt;String&gt; youngerPeopleSortedByIq =
+                loadsOfPeople
+                    .stream()
+                    .filter(x -> x.getAge() &lt; 50)
+                    .sorted(Comparator.comparing(Person::getIq).reversed())
+                    .map(Person::getName)
+                    .collect(Collectors.toList());
+						</code></pre>
+
+						<ol>
+							<li>Filter out all people older than 50</li>
+							<li>Inverse sort the remaining people by IQ</li>
+							<li>map each person to their name (convert to a Stream&lt;String&gt;)</li>
+							<li>Convert the result to a <code>List</code></li>
+						</ol>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 3 - sum</h2>
+
+						<pre><code data-trim class="java">
+int combinedAge = loadsOfPeople.stream()
+                    .mapToInt(Person::getAge) //converts to an IntStream
+                    .sum(); //this HAS to be a specialised Stream
+						</code></pre>
+
+						<ol>
+							<li>map each person to their age, producing an <code>IntStream</code></li>
+							<li>sum the results, also supports <code>average</code></li>
+						</ol>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 4 - map, reduce</h2>
+
+						<pre><code data-trim class="java">
+String xml = "&lt;people data='lastname'&gt;" +
+              loadsOfPeople.stream()
+                    .map(it -&gt; "&lt;person&gt;" + it.getName() + "&lt;/person&gt;")
+                    .reduce("", String::concat) //start with "" 
+           + "&lt;/people&gt;";
+						</code></pre>
+
+						<p>map each <code>Person</code> to an XML element (&lt;person&gt;Steve&lt;/person&gt;), then use String.concat to <code>reduce</code> the <code>Stream</code> into one XML <code>String</code></p>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+&lt;people&gt;
+	&lt;person&gt;Dave&lt;/person&gt;
+	&lt;person&gt;Helen&lt;/person&gt;
+	&lt;person&gt;Laura&lt;/person&gt;
+	&lt;person&gt;Ben&lt;/person&gt;
+&lt;/people&gt;
+						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 5 - map</h2>
+
+						<pre><code data-trim class="java">
+List&lt;Stream&lt;Person&gt;&gt; clonedPeople = loadsOfPeople.stream()
+    .map(person -> Stream.of(person, person.dolly()))
+    .collect(Collectors.toList());
+						</code></pre>
+
+						<ol>
+							<li>map creates a new Stream containing two people</li>
+							<li>This <code>Stream</code>  is then added to the main Stream as-is, leaving us with a pretty useless: <code>List&lt;Stream&lt;Person&gt;&gt;</code></li>
+						</ol>
+						<img class="fragment fade-in" src="images/Meh-Grumpy-Cat.jpg"/>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 6 - flatMap</h2>
+
+						<pre><code data-trim class="java">
+List&lt;Person&gt; clonedPeople2 = loadsOfPeople.stream()
+        .flatMap(person -> Stream.of(person, person.dolly()))
+        .collect(Collectors.toList());
+						</code></pre>
+
+						<ol>
+							<li>flatMap combines each element from the new <code>Streams</code> into one <code>Stream&lt;Person&gt;</code></li>
+							<li>So now we've got what we wanted in the first place, a <code>List&lt;Person&gt;</code></code></li>
+						</ol>
+						<div class="fragment fade-in">							
+							<img  src="images/woojesus.jpeg"/>
+							<p>Sweeet!</p>
+						</div>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 7 - Reduce</h2>
+
+						<pre><code data-trim class="java">
+int totalAgeUsingReduce = loadsOfPeople.stream().
+        map(Person::getAge).
+        reduce(0, (total, current) -> total + current);
+						</code></pre>
+
+						<ol>
+							<li>map from <code>Person</code> to age</li>
+							<li>reduce starts with a value of 0, then adds the value of each element to the total, giving us the total age</li>
+						</ol>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 8 - Reduce</h2>
+
+						<pre><code data-trim class="java">
+int youngestUsingReduce = loadsOfPeople.stream().
+        map(Person::getAge).
+        reduce((total, current) -> total + current).
+        get(); //get the result from the Optional
+						</code></pre>
+
+						<ul>
+							<li>This is the same as the previous example, the difference being we don't specify a default value for reduce</li>
+							<li>Not specifying a default value means the result is <code>Optional</code>... if the <code>Stream</code> is empty then so is the result!</li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 9 - Grouping</h2>
+
+						<pre><code data-trim class="java">
+Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
+        loadsOfPeople.stream().
+        filter(x -> x.getIq() > 110).
+        collect(Collectors.groupingBy(Person::getAge));
+						</code></pre>
+
+						<ul>
+							<li>The collect method groups the filtered results by age, producing a Map&lt;age, &lt;Person&gt;&gt;</li>
+						</ul>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+{52=[Person{name='Damo', age=52, iq=113, gender=MALE}],
+ 60=[Person{name='Jess', age=60, iq=120, gender=FEMALE}],
+ 28=[Person{name='Dave', age=28, iq=190, gender=MALE}]}
+						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 10 - Partitioning</h2>
+
+						<pre><code data-trim class="java">
+Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge = 
+        loadsOfPeople.stream().filter(x -> x.getIq() > 110).
+        collect(Collectors.partitioningBy(x -> x.getAge() > 55));
+						</code></pre>
+
+						<ul>
+							<li>The collect method partitions the filtered results by age</li>
+							<li>The <code>Map</code> will have two entries, true and false, according to the <code>Predicate</code></li>
+						</ul>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+{false=[Person{name='Dave', age=28, iq=190, gender=MALE}],
+ true=[Person{name='Jess', age=60, iq=120, gender=FEMALE}]}
+						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 11 - Multiple Groups</h2>
+
+						<pre><code data-trim class="java">
+Map&lt;Integer, Double&gt; peopleGroupedBySexAndAverageAge = 
+        loadsOfPeople.stream().filter(x -> x.getIq() > 110).
+        collect(Collectors.groupingBy(Person::getAge,
+                    Collectors.averagingInt(Person::getIq)));
+						</code></pre>
+
+						<ul>
+							<li>We can group by multiple <code>Collectors</code></li>
+							<li>Here we group by age and the average IQ of that group</li>
+						</ul>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+{52=113.0, 60=117.5, 28=190.0}
+						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 12 - findAny</h2>
+
+						<pre><code data-trim class="java">
+loadsOfPeople.stream()
+        .filter(t -> t.getGender() == Person.Sex.FEMALE)
+        .findAny()
+        .ifPresent(System.out::println);
+						</code></pre>
+
+						<ul>
+							<li><code>findAny</code> either returns an element or nothing, hence we get an Optional</li>
+							<li><code>ifPresent</code> executes the Lambda if we get a result</li>
+						</ul>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li></li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 13 - Parallel</h2>
+						<p>Lets iterate over 10,000,000 elements!</p>
+						</br>
+
+						<pre><code data-trim class="java">
+x -> Stream.iterate(1L, i -> i + 1).
+        limit(x).
+        reduce(Long::sum).get();
+						</code></pre>
+						<p>Executes in 80ms - we incur a penalty here because the <code>long</code> is repeatedly boxed and unboxed</p>
+
+						<div class="fragment fade-in">
+							<pre><code data-trim class="java">
+x -> Stream.iterate(1L, i -> i + 1).
+        parallel().limit(x).
+        reduce(Long::sum).get();
+							</code></pre>
+							<p>Executes in 211ms?! It turns out parallel isn't always a free win!</p>
+						</div>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>This proves just tagging parallel on the stream isn't always a win!</li>
+								<li>Parallel works much better on fixed lists, not dynamic ones</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Streams Example 14 - Parallel Win!</h2>
+
+						<pre><code data-trim class="java">
+x -> LongStream.rangeClosed(1L, x).
+        reduce(Long::sum).getAsLong();
+						</code></pre>
+						<p>Executes in 24ms - much better using an unboxed <code>Stream</code></p>
+
+						<div class="fragment fade-in">
+							<pre><code data-trim class="java">
+x -> LongStream.rangeClosed(1L, x).
+        parallel().
+        reduce(Long::sum).getAsLong();
+							</code></pre>
+							<p>Executes in 7ms - now that the <code>Stream</code> isn't dynamic, parallel works much better!</p>
+						</div>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>This proves just tagging parallel on the stream isn't always a win!</li>
+								<li>Parallel works much better on fixed lists, not dynamic ones</li>
+	          				</ul>
+	          			</aside>
+					</section>
 				</section>
 
 				<section>
-					<h1>THE END</h1>
-					<h3>BY Hakim El Hattab / hakim.se</h3>
+					<h2>It's been emotional...</h2>
+			        <ul>
+			        	<li>Slides at <a href="http://markglh.github.io/Java8Madlab-Slides">markglh.github.io/Java8Madlab-Slides</a>,</li>
+			         	<li>Source at <a href="https://github.com/markglh/Java8Madlab-Examples">github.com/markglh/Java8Madlab-Examples</a>,</li>
+			         	<li>Follow me <a href="https://twitter.com/markglh">@markglh</a>,</li>
+			        </ul>
 				</section>
 
 			</div>
