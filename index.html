@@ -78,14 +78,11 @@
 						<pre><code data-trim class="java">
 (int x, int y)   ->   x + y
 	          			</code></pre>
-	          			</br>
 
 	          			<p>Argument types can be inferred by the compiler:</p>
 	          			<pre><code data-trim class="java">
 (x, y)   ->   x + y
 	          			</code></pre>
-
-	          			</br>
 
 						<p>Zero-arg Lambdas are also possible:</p>
 	          			<pre><code data-trim class="java">
@@ -95,7 +92,8 @@
 
 						<p>But how can we use them?</p>
 						<pre class="fragment fade-in" ><code data-trim class="java">
-Consumer&lt;String&gt; inferredConsumer = x -> System.out.println(x);
+Consumer&lt;String&gt; inferredConsumer = 
+                    x -> System.out.println(x);
 	          			</code></pre>
 
 	          			<aside class="notes">
@@ -151,12 +149,12 @@ Consumer&lt;String&gt; inferredConsumer = x -> System.out.println(x);
 						<pre><code data-trim class="java">
 @FunctionalInterface  //Added in Java8 
 public interface Predicate&lt;T&gt; {
-	boolean test(T t); 
-	
+	boolean test(T t); 	
 }
 
-private void printAllPeopleMatchingPredicate(List&lt;Person&gt; people, 
-                                             Predicate&lt;Person&gt; predicate) {
+private void printMatchingPeople(
+                List&lt;Person&gt; people, 
+                Predicate&lt;Person&gt; predicate) {
     for (Person person : people) {
         if (predicate.test(person)) {
            System.out.println(person);
@@ -178,14 +176,15 @@ private void printAllPeopleMatchingPredicate(List&lt;Person&gt; people,
 						<p>Pre Java 8:</p>
 
 						<pre><code data-trim class="java">
-class PersonOlderThan50Predicate implements Predicate&lt;Person&gt; {
+public class PersonOver50Predicate 
+                    implements Predicate&lt;Person&gt; {
     public boolean test(Person person) {
         return person.getAge() >= 50;
     }
 }
 
-printAllPeopleMatchingPredicate(loadsOfPeople, 
-                                new PersonOlderThan50Predicate());
+printMatchingPeople(loadsOfPeople, 
+                    new PersonOver50Predicate());
 	          			</code></pre>
 	          			</br>
 
@@ -202,7 +201,8 @@ printAllPeopleMatchingPredicate(loadsOfPeople,
 						<p>Java 8:</p>
 
 						<pre><code data-trim class="java">
-printAllPeopleMatchingPredicate(loadsOfPeople, x -> x.getAge() > 50); 
+printMatchingPeople(loadsOfPeople, 
+                    x -> x.getAge() > 50); 
 	          			</code></pre>
 	          			<p>Notice the signature matches that of the Predicate, the compiler automatically figures out the rest</p>
 	          			</br>
@@ -212,8 +212,8 @@ printAllPeopleMatchingPredicate(loadsOfPeople, x -> x.getAge() > 50);
 		          		<div class="fragment fade-in">
 		          			<pre><code data-trim class="java">
 Predicate&lt;Person&gt; ageCheck = x -> x.getAge() > 50;
-printAllPeopleMatchingPredicate(loadsOfPeople, 
-                                ageCheck.and(x -> x.getIq() >100));
+printMatchingPeople(loadsOfPeople, 
+                ageCheck.and(x -> x.getIq() > 100));
 		          			</code></pre>
 		          			<p>Composite <code>Predicates</code> FTW... :-)</p>
 	          			</div>
@@ -261,6 +261,7 @@ r.run();
 List&lt;String&gt; strings = new ArrayList&lt;&gt;();
 Collections.addAll(strings, "Java", "7", "FTW");
 	          			</code></pre>
+	          			</br>
 	          			
 	          			<div class="fragment fade-in">
 		          			<p>Do <em>something</em> on every element in the List</p>
@@ -269,8 +270,14 @@ strings.forEach(x -> System.out.print(x + " "));
 //Prints: "Java 7 FTW"
 		          			</code></pre>
 	          			</div>
-	          			
-	          			<div class="fragment fade-in">
+					</section>
+
+					<section>
+						<h2>Lambda Example 4 - More Collections</h2>
+
+						<p>Lambdas make lots of new Collection methods possible...</p>
+
+	          			<div>
 		          			<p>Replace every matching element in the List</p>
 		          			<pre><code data-trim class="java">
 strings.replaceAll(x -> x == "7" ? "8" : x); 
@@ -278,6 +285,7 @@ strings.forEach(x -> System.out.print(x + " "));
 //Prints: "Java 8 FTW"
 		          			</code></pre>
 	          			</div>
+	          			</br>
 
 						<div class="fragment fade-in">
 		          			<p>Remove matching elements from the List</p>
@@ -296,27 +304,39 @@ strings.forEach(x -> System.out.print(x + " "));
 					</section>
 
 					<section>
-						<h2>Lambda Example 4 - Comparators</h2>
+						<h2>Lambda Example 5 - Comparators</h2>
 
 						<pre><code data-trim class="java">
 @FunctionalInterface //Added in Java8 version
 public interface Comparator&lt;T&gt; {
-	int compare(T o1, T o2);
-	//Java 8 adds loads of default methods...
+    int compare(T o1, T o2);
+    //Java 8 adds loads of default methods
 }
 						</code></pre>
+
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Java 8 adds loads of default comparator methods...</li>
+	          					<li>The types can be inferred when mapping to the FunctionalInterface</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Lambda Example 6 - Comparators 2</h2>
 
 						<p>Pre Java 8:</p>
 
 						<pre><code data-trim class="java">
-class SortByPersonAge implements Comparator&lt;Person&gt; {
+public class SortByPersonAge 
+                    implements Comparator&lt;Person&gt; {
     public int compare(Person p1, Person p2) {
         return p1.getAge() - p2.getAge();
     }
 }
-
 List&lt;Person&gt; loadsOfPeople = ...;
-Collections.sort(loadsOfPeople, new SortByPersonAge());
+Collections.sort(loadsOfPeople, 
+                 new SortByPersonAge());
 
 	          			</code></pre>
 
@@ -324,7 +344,8 @@ Collections.sort(loadsOfPeople, new SortByPersonAge());
 		          			<p>Java 8:</p>
 
 							<pre><code data-trim class="java">
-	Collections.sort(loadsOfPeople, (p1, p2) -> p1.getAge() - p2.getAge());
+Collections.sort(loadsOfPeople, 
+            (p1, p2) -> p1.getAge() - p2.getAge());
 		          			</code></pre>
 	          			</div>
 
@@ -335,44 +356,54 @@ Collections.sort(loadsOfPeople, new SortByPersonAge());
 	          				</ul>
 	          			</aside>
 					</section>
-				</section>
 
-				<section>
-						<h2>Lambda Example 4 - Comparators</h2>
+					<section>
+						<h2>Lambda Example 7 - Comparators 3</h2>
 
 						<p>As usual in Java 8... the <code>Comparator</code> interface provides plenty of useful default &amp; static methods...</p>
 			
 						<pre><code data-trim class="java">
-//comparing static method simplifies creating Comparators
-Comparator&lt;Person&gt; newComparator = Comparator.comparing(e -> e.getIq());
+//&quot;comparing&quot; static method simplifies creation
+Comparator&lt;Person&gt; newComparator = 
+               Comparator.comparing(e -> e.getIq());
 						</code></pre>
+						</br>
 
 						<pre class="fragment fade-in"><code data-trim class="java">
-//thenComparing allows composite comparators to be easily created
+//&quot;thenComparing&quot; combines comparators
 Collections.sort(loadsOfPeople, 
-                 newComparator.thenComparing(
-                               Comparator.comparing(e -> e.getIq())));
+        newComparator.thenComparing(
+            Comparator.comparing(e -> e.getIq())));
 						</code></pre>
-
-						<pre class="fragment fade-in"><code data-trim class="java">
-//More useful Collection methods...
-loadsOfPeople4.sort(Comparator.comparing(e -> e.getIq()));
-						</code></pre>
-
-						<pre class="fragment fade-in"><code data-trim class="java">
-//And finally... Method references (I'll explain this soon!)
-loadsOfPeople.sort(Comparator.comparing(Person::getAge));
-						</code></pre>
-
 	          			
 	          			<aside class="notes">
 	          				<ul>
-	          					<li>Multiple arguments need to be in parenthesis</li>
-	          					<li>The types can be inferred when mapping to the FunctionalInterface</li>
+	          					<li>ThenComparing allows for composite Comparators</li>
 	          				</ul>
 	          			</aside>
 					</section>
+
+					<section>
+						<h2>Lambda Example 8 - Comparators 4</h2>
+
+						<p>and more...</p>
+
+						<pre><code data-trim class="java">
+//More useful Collection methods...
+loadsOfPeople4.sort(
+        Comparator.comparing(e -> e.getIq()));
+						</code></pre>
+						</br>
+
+						<pre class="fragment fade-in"><code data-trim class="java">
+//And finally... Method references
+loadsOfPeople.sort(
+        Comparator.comparing(Person::getAge));
+						</code></pre>
+					</section>
+				
 				</section>
+
 
 				<section>
 					<section>
@@ -426,15 +457,16 @@ loadsOfPeople.sort(Comparator.comparing(Person::getAge));
 						<h2>Reference to a static method</h2>
 						<p>A simple reference to a static method</p>
 						<pre><code data-trim class="java">
-//isPersonOlderThan50 is a static method on the PersonPredicates class
-printAllPeopleMatchingPredicate(loadsOfPeople, 
-                                PersonPredicates::isPersonOlderThan50);
+//isPersonOver50 is a static method
+printMatchingPeople(loadsOfPeople, 
+                  PersonPredicates::isPersonOver50);
 						</code></pre>
 	          			</br>
 
 	          			<p>This is equivalent to</p>
 	          			<pre><code data-trim class="java">
-printAllPeopleMatchingPredicate(loadsOfPeople, x -> x.getAge() > 50);
+printMatchingPeople(loadsOfPeople, 
+                    x -> x.getAge() > 50);
 						</code></pre>
 	          			<aside class="notes">
 	          				<ul>
@@ -467,25 +499,35 @@ strings.forEach(x -> System.out.print(x));
 
 					<section>
 						<h2>Reference to an instance method of an arbitrary object</h2>
-						<p>Although it looks like we're referencing a Class method, we're invoking an instance method on the object(s) passed in the call</p>
+						<p>Examine this simplified definition of a map function</p>
 						<pre><code data-trim class="java">
 public interface Function&lt;T,R&gt; {
 	public R apply(T t);
 }
 
-public static &lt;T, R&gt; List&lt;R&gt; map(Function&lt;T, R&gt; function, List&lt;T&gt; source) {
-        //applies the function to each element, converting it from T to R
+public &lt;T, R&gt; List&lt;R&gt; map(Function&lt;T, R&gt; function, 
+                          List&lt;T&gt; source) {
+    /* applies the function to each element, 
+       converting it from T to R */
 }
 						</code></pre>
+					</section>
+
+					<section>
+						<h2>Reference to an instance method of an arbitrary object cont...</h2>
+						<p>Although it looks like we're referencing a Class method, we're invoking an instance method on the object(s) passed in the call</p>
+						</br>
+
 						<pre><code data-trim class="java">
 List&lt;Person&gt; loadsOfPeople = ...
-List&lt;Integer&gt; namesOfPeople = map(Person::getAge, loadsOfPeople);
+List&lt;Integer&gt; namesOfPeople = 
+                map(Person::getAge, loadsOfPeople);
 						</code></pre>
 	          			</br>
 
 	          			<p>This is equivalent to</p>
 	          			<pre><code data-trim class="java">
-List&lt;Integer&gt; namesOfPeople = map(person -> person.getAge(), loadsOfPeople);
+map(person -> person.getAge(), loadsOfPeople);
 						</code></pre>
 						
 	          			<aside class="notes">
@@ -495,21 +537,22 @@ List&lt;Integer&gt; namesOfPeople = map(person -> person.getAge(), loadsOfPeople
 	          			</aside>
 					</section>
 
+
 					<section>
 						<h2>Reference to a constructor</h2>
 						<p>Uses the constructor to create new objects, the constructor signature must match that of the FunctionalInterface</p>
 						<pre><code data-trim class="java">
-List&lt;String&gt; digits = Arrays.asList("1", "2", "3", "4", "5");
+List&lt;String&gt; digits = Arrays.asList("1", "2", "3");
 						</code></pre>
 						<pre><code data-trim class="java">
-//Transforms a String into an Integer using the default Integer constructor
+//Transforms a String into a new Integer
 List&lt;Integer&gt; numbers = map(Integer::new, digits);
 						</code></pre>
 	          			</br>
 
 	          			<p>This is equivalent to</p>
 	          			<pre><code data-trim class="java">
-List&lt;Integer&gt; numbers2 = map(s -> new Integer(s), digits);
+map(s -> new Integer(s), digits);
 						</code></pre>
 						
 	          			<aside class="notes">
@@ -526,7 +569,6 @@ List&lt;Integer&gt; numbers2 = map(s -> new Integer(s), digits);
 						<ul>
 							<li>Every application uses Collections, however Collections are difficult to query and aggregate, requiring several levels of iteration and conditionals, basically it’s messy and painful</li>
 							<li>Writing multi-threaded code to do this manually is difficult to write and maintain</li>
-							<li>What we want is to execute a SQL like query on the collection to return a useful set of data</li>
 						</ul>
 
 						</br></br>
@@ -538,14 +580,14 @@ Map&lt;String, Long&gt; letterToNumberOfOccurrences =
     words.map(w -> w.split(""))
             .flatMap(Arrays::stream)
             .collect(Collectors.groupingBy(
-                                Function.identity(), 
-                                Collectors.counting()));
+                            Function.identity(), 
+                            Collectors.counting()));
 //Prints: //{a=2, T=1, F=1, v=1, W=1, 8=1, J=1}
 							</code></pre>
 						</div>
 	          			<aside class="notes">
 	          				<ul>
-	          					<li></li>
+	          					<li>What we want is to execute a SQL like query on the collection to return a useful set of data</li>
 	          				</ul>
 	          			</aside>
 					</section>
@@ -611,7 +653,7 @@ Map&lt;String, Long&gt; letterToNumberOfOccurrences =
 						<h2>map</h2>
 
 						<pre><code data-trim class="java">
-public &lt;R&gt; Stream&lt;R&gt; map(Function&lt;T, R&gt; mapper)
+public &lt;R&gt; Stream&lt;R&gt; map(Function&lt;T, R&gt; mapper);
 						</code></pre>
 
 						</br>
@@ -629,7 +671,8 @@ public &lt;R&gt; Stream&lt;R&gt; map(Function&lt;T, R&gt; mapper)
 						<h2>flatMap</h2>
 
 						<pre><code data-trim class="java">
-public &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;T, Stream&lt;R&gt;&gt; mapper)
+public &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;T, 
+                             Stream&lt;R&gt;&gt; mapper);
 						</code></pre>
 
 						</br>
@@ -654,8 +697,11 @@ public &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;T, Stream&lt;R&gt;&gt; mapp
 						<h2>reduce</h2>
 
 						<pre><code data-trim class="java">
-public T reduce(T identity, BinaryOperator&lt;T&gt; accumulator);
-public Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator);
+public T reduce(T identity, 
+                BinaryOperator&lt;T&gt; accumulator);
+
+public Optional&lt;T&gt; reduce(
+                BinaryOperator&lt;T&gt; accumulator);
 
 //This is the function contained in BinaryOperator
 R apply(T t, U u);
@@ -682,7 +728,7 @@ R apply(T t, U u);
 
 						<pre><code data-trim class="java">
 loadsOfPeople.stream().
-map(Person::getAge). //lets assume 3 elements: 5, 10 ,15
+map(Person::getAge). //contains 5, 10, 15
 reduce(0, (total, current) -> total + current);
 						</code></pre>
 
@@ -710,10 +756,6 @@ reduce(0, (total, current) -> total + current);
 List&lt;String&gt; listOfStrings = loadsOfPeople.stream()
              .map(x -> x.getName())
              .collect(Collectors.toList());
-
-Map&lt;Integer, List&lt;Person&gt;&gt; ageToPersonMap = 
-                loadsOfPeople.stream().
-                collect(Collectors.groupingBy(Person::getAge));
 						</code></pre>
 
 						<ul class="fragment fade-in">
@@ -734,22 +776,15 @@ Map&lt;Integer, List&lt;Person&gt;&gt; ageToPersonMap =
 						<h2>Streams Example 1</h2>
 
 						<pre><code data-trim class="java">
-List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
-List&lt;Integer&gt; twoEvenSquares =
-    numbers.stream()
-            .filter(n -> {//Filter out any odd numbers
-                System.out.println("filtering " + n);
-                return n % 2 == 0;
-            })
-            .map(n -> {//Multiply by itself
-                System.out.println("mapping " + n);
-                return n * n;
-            })
-            .limit(2)//Limit to two results
-            .collect(Collectors.toList()); //Finish and convert to a List
+List&lt;Integer&gt; numbers = Arrays.asList(1, 2 ... 8);
+List&lt;Integer&gt; twoEvenSquares = numbers.stream()
+    .filter(n -> n % 2 == 0) //Filter odd numbers
+    .map(n -> n * n) ////Multiply by itself
+    .limit(2)//Limit to two results
+    .collect(Collectors.toList()); //Finish!
 						</code></pre>
 
-<p>And the results...</p>
+<p>Imagine a <code>println</code> in each step...</p>
 						<pre><code data-trim class="java">
 filtering 1
 filtering 2
@@ -774,12 +809,12 @@ twoEvenSquares = List[4, 16]
 
 						<pre><code data-trim class="java">
 List&lt;String&gt; youngerPeopleSortedByIq =
-                loadsOfPeople
-                    .stream()
-                    .filter(x -> x.getAge() &lt; 50)
-                    .sorted(Comparator.comparing(Person::getIq).reversed())
-                    .map(Person::getName)
-                    .collect(Collectors.toList());
+    loadsOfPeople.stream()
+        .filter(x -> x.getAge() &lt; 50)
+        .sorted(Comparator
+                .comparing(Person::getIq).reversed())
+        .map(Person::getName)
+        .collect(Collectors.toList());
 						</code></pre>
 
 						<ol>
@@ -800,9 +835,10 @@ List&lt;String&gt; youngerPeopleSortedByIq =
 						<h2>Streams Example 3 - sum</h2>
 
 						<pre><code data-trim class="java">
-int combinedAge = loadsOfPeople.stream()
-                    .mapToInt(Person::getAge) //converts to an IntStream
-                    .sum(); //this HAS to be a specialised Stream
+int combinedAge = 
+    loadsOfPeople.stream()
+      .mapToInt(Person::getAge) //returns IntStream
+      .sum(); //this HAS to be a specialised Stream
 						</code></pre>
 
 						<ol>
@@ -821,11 +857,12 @@ int combinedAge = loadsOfPeople.stream()
 						<h2>Streams Example 4 - map, reduce</h2>
 
 						<pre><code data-trim class="java">
-String xml = "&lt;people data='lastname'&gt;" +
-              loadsOfPeople.stream()
-                    .map(it -&gt; "&lt;person&gt;" + it.getName() + "&lt;/person&gt;")
-                    .reduce("", String::concat) //start with "" 
-           + "&lt;/people&gt;";
+String xml = 
+  "&lt;people data='lastname'&gt;" +
+  loadsOfPeople.stream()
+    .map(x -&gt; "&lt;person&gt;" + x.getName() + "&lt;/person&gt;")
+    .reduce("", String::concat) //start with "" 
+  + "&lt;/people&gt;";
 						</code></pre>
 
 						<p>map each <code>Person</code> to an XML element (&lt;person&gt;Steve&lt;/person&gt;), then use String.concat to <code>reduce</code> the <code>Stream</code> into one XML <code>String</code></p>
@@ -850,7 +887,8 @@ String xml = "&lt;people data='lastname'&gt;" +
 						<h2>Streams Example 5 - map</h2>
 
 						<pre><code data-trim class="java">
-List&lt;Stream&lt;Person&gt;&gt; clonedPeople = loadsOfPeople.stream()
+List&lt;Stream&lt;Person&gt;&gt; clonedPeople = 
+  loadsOfPeople.stream()
     .map(person -> Stream.of(person, person.dolly()))
     .collect(Collectors.toList());
 						</code></pre>
@@ -873,8 +911,9 @@ List&lt;Stream&lt;Person&gt;&gt; clonedPeople = loadsOfPeople.stream()
 
 						<pre><code data-trim class="java">
 List&lt;Person&gt; clonedPeople2 = loadsOfPeople.stream()
-        .flatMap(person -> Stream.of(person, person.dolly()))
-        .collect(Collectors.toList());
+    .flatMap(person -> Stream.of(person, 
+                                 person.dolly()))
+    .collect(Collectors.toList());
 						</code></pre>
 
 						<ol>
@@ -897,9 +936,9 @@ List&lt;Person&gt; clonedPeople2 = loadsOfPeople.stream()
 						<h2>Streams Example 7 - Reduce</h2>
 
 						<pre><code data-trim class="java">
-int totalAgeUsingReduce = loadsOfPeople.stream().
-        map(Person::getAge).
-        reduce(0, (total, current) -> total + current);
+int totalAgeUsingReduce = loadsOfPeople.stream()
+    .map(Person::getAge)
+    .reduce(0, (total, current) -> total + current);
 						</code></pre>
 
 						<ol>
@@ -917,10 +956,10 @@ int totalAgeUsingReduce = loadsOfPeople.stream().
 						<h2>Streams Example 8 - Reduce</h2>
 
 						<pre><code data-trim class="java">
-int youngestUsingReduce = loadsOfPeople.stream().
-        map(Person::getAge).
-        reduce((total, current) -> total + current).
-        get(); //get the result from the Optional
+int youngestUsingReduce = loadsOfPeople.stream()
+    .map(Person::getAge)
+    .reduce((total, current) -> total + current)
+    .get(); //get the result from the Optional
 						</code></pre>
 
 						<ul>
@@ -940,9 +979,9 @@ int youngestUsingReduce = loadsOfPeople.stream().
 
 						<pre><code data-trim class="java">
 Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
-        loadsOfPeople.stream().
-        filter(x -> x.getIq() > 110).
-        collect(Collectors.groupingBy(Person::getAge));
+  loadsOfPeople.stream()
+    .filter(x -> x.getIq() > 110)
+    .collect(Collectors.groupingBy(Person::getAge));
 						</code></pre>
 
 						<ul>
@@ -950,9 +989,9 @@ Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
 						</ul>
 
 						<pre class="fragment fade-in"><code data-trim class="java">
-{52=[Person{name='Damo', age=52, iq=113, gender=MALE}],
- 60=[Person{name='Jess', age=60, iq=120, gender=FEMALE}],
- 28=[Person{name='Dave', age=28, iq=190, gender=MALE}]}
+{52=[Person{... age=52, iq=113, gender=MALE}],
+ 60=[Person{... age=60, iq=120, gender=FEMALE}],
+ 28=[Person{... age=28, iq=190, gender=MALE}]}
 						</code></pre>
 
 	          			<aside class="notes">
@@ -967,8 +1006,9 @@ Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
 
 						<pre><code data-trim class="java">
 Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge = 
-        loadsOfPeople.stream().filter(x -> x.getIq() > 110).
-        collect(Collectors.partitioningBy(x -> x.getAge() > 55));
+  loadsOfPeople.stream().filter(x -> x.getIq() > 110)
+    .collect(Collectors
+              .partitioningBy(x -> x.getAge() > 55));
 						</code></pre>
 
 						<ul>
@@ -977,8 +1017,8 @@ Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge =
 						</ul>
 
 						<pre class="fragment fade-in"><code data-trim class="java">
-{false=[Person{name='Dave', age=28, iq=190, gender=MALE}],
- true=[Person{name='Jess', age=60, iq=120, gender=FEMALE}]}
+{false=[Person{... age=28, iq=190, gender=MALE}],
+ true=[Person{... age=60, iq=120, gender=FEMALE}]}
 						</code></pre>
 
 	          			<aside class="notes">
@@ -992,10 +1032,12 @@ Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge =
 						<h2>Streams Example 11 - Multiple Groups</h2>
 
 						<pre><code data-trim class="java">
-Map&lt;Integer, Double&gt; peopleGroupedBySexAndAverageAge = 
-        loadsOfPeople.stream().filter(x -> x.getIq() > 110).
-        collect(Collectors.groupingBy(Person::getAge,
-                    Collectors.averagingInt(Person::getIq)));
+Map&lt;Integer, Double&gt; peopleGroupedBySexAndAvgAge = 
+  loadsOfPeople.stream()
+    .filter(x -> x.getIq() > 110)
+    .collect(
+        Collectors.groupingBy(Person::getAge,
+            Collectors.averagingInt(Person::getIq)));
 						</code></pre>
 
 						<ul>
@@ -1019,9 +1061,9 @@ Map&lt;Integer, Double&gt; peopleGroupedBySexAndAverageAge =
 
 						<pre><code data-trim class="java">
 loadsOfPeople.stream()
-        .filter(t -> t.getGender() == Person.Sex.FEMALE)
-        .findAny()
-        .ifPresent(System.out::println);
+    .filter(t -> t.getGender() == Person.Sex.FEMALE)
+    .findAny()
+    .ifPresent(System.out::println);
 						</code></pre>
 
 						<ul>
@@ -1042,17 +1084,17 @@ loadsOfPeople.stream()
 						</br>
 
 						<pre><code data-trim class="java">
-x -> Stream.iterate(1L, i -> i + 1).
-        limit(x).
-        reduce(Long::sum).get();
+x -> Stream.iterate(1L, i -> i + 1)
+        .limit(x)
+        .reduce(Long::sum).get();
 						</code></pre>
 						<p>Executes in 80ms - we incur a penalty here because the <code>long</code> is repeatedly boxed and unboxed</p>
 
 						<div class="fragment fade-in">
 							<pre><code data-trim class="java">
-x -> Stream.iterate(1L, i -> i + 1).
-        parallel().limit(x).
-        reduce(Long::sum).get();
+x -> Stream.iterate(1L, i -> i + 1)
+        .parallel().limit(x)
+        .reduce(Long::sum).get();
 							</code></pre>
 							<p>Executes in 211ms?! It turns out parallel isn't always a free win!</p>
 						</div>
@@ -1069,16 +1111,16 @@ x -> Stream.iterate(1L, i -> i + 1).
 						<h2>Streams Example 14 - Parallel Win!</h2>
 
 						<pre><code data-trim class="java">
-x -> LongStream.rangeClosed(1L, x).
-        reduce(Long::sum).getAsLong();
+x -> LongStream.rangeClosed(1L, x)
+        .reduce(Long::sum).getAsLong();
 						</code></pre>
 						<p>Executes in 24ms - much better using an unboxed <code>Stream</code></p>
 
 						<div class="fragment fade-in">
 							<pre><code data-trim class="java">
-x -> LongStream.rangeClosed(1L, x).
-        parallel().
-        reduce(Long::sum).getAsLong();
+x -> LongStream.rangeClosed(1L, x)
+        .parallel()
+        .reduce(Long::sum).getAsLong();
 							</code></pre>
 							<p>Executes in 7ms - now that the <code>Stream</code> isn't dynamic, parallel works much better!</p>
 						</div>
