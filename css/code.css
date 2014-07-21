@@ -1,6 +1,20 @@
 @charset "UTF-8";
 
+/*Menlo is an OSX font, will default to Monospace on other O/S */
 
 .reveal pre code {
 	font-family: Menlo
+}
+
+.reveal .slides pre {
+    font-family: Menlo
+    width: 100%;
+    font-size: 0.8em;
+}
+
+.reveal .slides pre code {
+	font-family: Menlo
+	max-height: 600px;
+	height: 100%;
+	max-height: 100%;
 }
