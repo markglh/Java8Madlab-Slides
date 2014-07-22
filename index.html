@@ -51,6 +51,51 @@
 
 				<section>
 					<section>
+						<h2>Interface default methods</h2>
+						<ul>
+	         				<li>Interfaces can now have <code>default</code> &amp; <static>static</static> methods!</li>
+	         				<li>Allows new interface methods to be added without breaking existing implementations</li>
+	         				<li>Multiple inheritance!</li>
+	          			</ul>
+	          			<pre><code data-trim class="java">
+public interface Comparator&lt;T&gt; {
+  default Comparator&lt;T&gt; reversed() {
+        // Implementation here
+  }
+
+  public static Comparator&lt;T&gt; naturalOrder() {
+        // Implementation here
+  }
+}
+	          			</code></pre>
+						</p>
+	          			<aside class="notes">
+	          				<ul>
+	          					<li>Loads of existing java interfaces have been updated with default and static methods</li>
+	          					<li>We'll see examples later</li>
+	          				</ul>
+	          			</aside>
+					</section>
+
+					<section>
+						<h2>Multiple Inheritance...</h2>
+						<ul>
+	         				<li>What if a class inherits the same default method from two interfaces???
+	         				</br></br>
+	         					<ol class="fragment fade-in">
+		         					<li>Class methods always win. Whether it’s this class or the superclass, it will take priority</li>
+		         					<li>If multiple interfaces define the same method with a default implementation, then the most specific is selected (the child in inheritance terms)</li>
+		         					<li>If it’s not obvious then the compiler will cry, we need to explicitly choose: <strong>INTERFACE</strong>.super.<strong>METHODNAME</strong></li>
+		         				</ol>
+	         				</li>
+	          			</ul>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
 						<h2>Lambdas you say?</h2>
 						<ul>
 	         				<li>Basically just a shorthand method implementation</li>
@@ -91,7 +136,7 @@
 	          			</br>
 
 						<p>But how can we use them?</p>
-						<pre class="fragment fade-in" ><code data-trim class="java">
+						<pre class="fragment fade-in"><code data-trim class="java">
 Consumer&lt;String&gt; inferredConsumer = 
                     x -> System.out.println(x);
 	          			</code></pre>
