@@ -419,7 +419,7 @@ Comparator&lt;Person&gt; newComparator =
 //&quot;thenComparing&quot; combines comparators
 Collections.sort(loadsOfPeople, 
         newComparator.thenComparing(
-            Comparator.comparing(e -> e.getIq())));
+            Comparator.comparing(e -> e.getAge())));
 						</code></pre>
 	          			
 	          			<aside class="notes">
