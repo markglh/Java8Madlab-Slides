@@ -371,16 +371,16 @@ public interface Comparator&lt;T&gt; {
 						<h2>Lambda Example 6 - Comparators 2</h2>
 
 						<pre><code data-trim class="java">
+List&lt;Person&gt; loadsOfPeople = ...;
+   						</code></pre>
+   						<p>Pre Java 8:</p>
+						<pre><code data-trim class="java">
 public class SortByPersonAge 
                     implements Comparator&lt;Person&gt; {
     public int compare(Person p1, Person p2) {
         return p1.getAge() - p2.getAge();
     }
 }
-List&lt;Person&gt; loadsOfPeople = ...;
-   						</code></pre>
-   						<p>Pre Java 8:</p>
-						<pre><code data-trim class="java">
 Collections.sort(loadsOfPeople, 
                  new SortByPersonAge());
 
