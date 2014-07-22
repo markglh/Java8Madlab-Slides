@@ -578,7 +578,7 @@ map(person -> person.getAge(), loadsOfPeople);
 						
 	          			<aside class="notes">
 	          				<ul>
-	          					<li>Useful for saving a few characters but not the most widely used type</li>
+	          					<li>Notice the Person object we're using for the reference looks like a class. The compiler uses the reference to invoke the method on each object in the list</li>
 	          				</ul>
 	          			</aside>
 					</section>
@@ -586,7 +586,7 @@ map(person -> person.getAge(), loadsOfPeople);
 
 					<section>
 						<h2>Reference to a constructor</h2>
-						<p>Uses the constructor to create new objects, the constructor signature must match that of the FunctionalInterface</p>
+						<p>Uses the constructor to create new objects, the constructor signature must match that of the <code>@FunctionalInterface</code></p>
 						<pre><code data-trim class="java">
 List&lt;String&gt; digits = Arrays.asList("1", "2", "3");
 						</code></pre>
@@ -650,13 +650,13 @@ Map&lt;String, Long&gt; letterToNumberOfOccurrences =
 						</ul>
 	          			<aside class="notes">
 	          				<ul>
-	          					<li>Similar to, but not as comprehensive as LINQ</li>
+	          					<li>Similar to LINQ</li>
 	          					<li>Streams are wrappers around data sources</li>
-	          					<li>Different to a List, which is an in memory data structure where every element has to be computed before it can be added</li>
-								<li>Short circuiting allows the stream to end processing as soon as the result is obtained</li>
-								<li>Loop fusion (fusing results together to process each one at a time rather than waiting for the whole set to pass through the intermediate operation)</li>
-								<li>Lazy processing means that nothing is done until a terminal command is executed, the most efficient sequence of operations is then calculated and invoked</li>
-								<li>Data can come from various sources (Collections, Arrays, IO)</li>
+	          					<li>Different to a List, which is an in memory data structure: every element computed when added</li>
+								<li>Short circuiting: ends processing immediately</li>
+								<li>Loop fusion: merges operations into one pass</li>
+								<li>Lazy processing waits unti la terminal command, then optimises intermediate steps</li>
+								<li>Data from various sources (Collections, Arrays, IO)</li>
 								<li>Don't modify the original list</li>
 	          				</ul>
 	          			</aside>
@@ -754,6 +754,7 @@ R apply(T t, U u);
 						</code></pre>
 
 						<ul>
+							<li>Terminal Operation</li>
 							<li>Normally used on combination with map</li>
 							<li>Takes a <code>Stream</code> of values and repeatedly applies the accumulator to reduce them into a single value</li>
 							<li>The accumulator is passed the total so far (<code>T</code>) and the current element (<code>U</code>)</li>
@@ -773,9 +774,9 @@ R apply(T t, U u);
 						<h2>reduce continued...</h2>
 
 						<pre><code data-trim class="java">
-loadsOfPeople.stream().
-map(Person::getAge). //contains 5, 10, 15
-reduce(0, (total, current) -> total + current);
+int totalAgeUsingReduce = loadsOfPeople.stream()
+  .map(Person::getAge) //contains 5, 10, 15
+  .reduce(0, (total, current) -> total + current);
 						</code></pre>
 
 						<ul>
@@ -982,26 +983,6 @@ List&lt;Person&gt; clonedPeople2 = loadsOfPeople.stream()
 						<h2>Streams Example 7 - Reduce</h2>
 
 						<pre><code data-trim class="java">
-int totalAgeUsingReduce = loadsOfPeople.stream()
-    .map(Person::getAge)
-    .reduce(0, (total, current) -> total + current);
-						</code></pre>
-
-						<ol>
-							<li>map from <code>Person</code> to age</li>
-							<li>reduce starts with a value of 0, then adds the value of each element to the total, giving us the total age</li>
-						</ol>
-	          			<aside class="notes">
-	          				<ul>
-	          					<li></li>
-	          				</ul>
-	          			</aside>
-					</section>
-
-					<section>
-						<h2>Streams Example 8 - Reduce</h2>
-
-						<pre><code data-trim class="java">
 int youngestUsingReduce = loadsOfPeople.stream()
     .map(Person::getAge)
     .reduce((total, current) -> total + current)
@@ -1021,7 +1002,7 @@ int youngestUsingReduce = loadsOfPeople.stream()
 					</section>
 
 					<section>
-						<h2>Streams Example 9 - Grouping</h2>
+						<h2>Streams Example 8 - Grouping</h2>
 
 						<pre><code data-trim class="java">
 Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
@@ -1048,7 +1029,7 @@ Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
 					</section>
 
 					<section>
-						<h2>Streams Example 10 - Partitioning</h2>
+						<h2>Streams Example 9 - Partitioning</h2>
 
 						<pre><code data-trim class="java">
 Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge = 
@@ -1075,7 +1056,7 @@ Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge =
 					</section>
 
 					<section>
-						<h2>Streams Example 11 - Multiple Groups</h2>
+						<h2>Streams Example 10 - Multiple Groups</h2>
 
 						<pre><code data-trim class="java">
 Map&lt;Integer, Double&gt; peopleGroupedBySexAndAvgAge = 
@@ -1103,7 +1084,7 @@ Map&lt;Integer, Double&gt; peopleGroupedBySexAndAvgAge =
 					</section>
 
 					<section>
-						<h2>Streams Example 12 - findAny</h2>
+						<h2>Streams Example 11 - findAny</h2>
 
 						<pre><code data-trim class="java">
 loadsOfPeople.stream()
@@ -1125,7 +1106,7 @@ loadsOfPeople.stream()
 					</section>
 
 					<section>
-						<h2>Streams Example 13 - Parallel</h2>
+						<h2>Streams Example 12 - Parallel</h2>
 						<p>Lets iterate over 10,000,000 elements!</p>
 						</br>
 
@@ -1154,7 +1135,11 @@ x -> Stream.iterate(1L, i -> i + 1)
 					</section>
 
 					<section>
-						<h2>Streams Example 14 - Parallel Win!</h2>
+						<img src="images/jackiechanwtf.jpeg"/>
+					</section>
+
+					<section>
+						<h2>Streams Example 13 - Parallel Win!</h2>
 
 						<pre><code data-trim class="java">
 x -> LongStream.rangeClosed(1L, x)
@@ -1185,9 +1170,9 @@ x -> LongStream.rangeClosed(1L, x)
 						<h2>Optional</h2>
 
 						<ul>
-							<li>Use <code>Optional</code> instead of passing null around, Helps prevent <code>NullPointerExceptions</code></li>
+							<li>Use <code>Optional</code> instead of passing null around, helps prevent <code>NullPointerExceptions</code></li>
 							<li><code>Optional</code> is a container that’s either empty or present, in which case it contains a value</li>
-							<li>So anytime that you’re thinking of return or accepting <code>null</code> value in a method, use <code>Optional</code> instead!</li>
+							<li>So anytime that you’re thinking of return or accepting a <code>null</code> value in a method, use <code>Optional</code> instead!</li>
 	          			</ul>
 	          			<pre class="fragment fade-in"><code data-trim class="java">
 public class Computer {
@@ -1253,17 +1238,10 @@ if (mainboard.isPresent() &amp;&amp;
 							<pre><code data-trim class="java">
 Optional&lt;String&gt; cpuType = 
   mainboard.map(Mainboard::getCpu)
-  .map(Cpu::getType); //Optional&lt;Optional&lt;Cpu&gt;&gt;
+    .map(Cpu::getType); //Optional&lt;Optional&lt;Cpu&gt;&gt;
 							</code></pre>
 							<p>***Fails to compile, calling <code>getType</code> on an <code>Optional</code>... if only we could flatten it???</p>
 						</div>
-
-	          			<aside class="notes">
-	          				<ul>
-	          					<li>This proves just tagging parallel on the stream isn't always a win!</li>
-								<li>Parallel works much better on fixed lists, not dynamic ones</li>
-	          				</ul>
-	          			</aside>
 					</section>
 
 					<section>
