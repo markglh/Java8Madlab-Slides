@@ -779,13 +779,13 @@ int totalAgeUsingReduce = loadsOfPeople.stream()
   .reduce(0, (total, current) -> total + current);
 						</code></pre>
 
-						<ul>
+						<ol>
 							<li class="fragment fade-in">First we map the <code>Person</code> to the age <code>int</code></li>
 							<li class="fragment fade-in">reduce then starts at <code>0</code>, and adds the current element, <code>5</code></li>
 							<li class="fragment fade-in">reduce continues by adding the current total <code>5</code>, to the next element, <code>10</code></li>
 							<li class="fragment fade-in">finally reduce adds the current total <code>15</code>, to the next element <code>15</code></li>
 							<li class="fragment fade-in">Tada, we've added up all the ages: <code>30!</code></li>
-						</ul>
+						</o l>
 
 	          			<aside class="notes">
 	          				<ul>
