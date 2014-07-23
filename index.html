@@ -158,8 +158,8 @@ Consumer&lt;String&gt; inferredConsumer =
 						<h2>Functional Interfaces</h2>
 						<ul>
 							<li>A Functional Interface is any interface with <em>one</em> <strong>S</strong>ingle <strong>A</strong>bstract <strong>M</strong>ethod</li>
-							<li class="fragment fade-in">The parameters that the Lambda accepts and returns must match the interface (incuding exceptions)</li>
-							<li class="fragment fade-in"><code>@FunctionalInterface</code> annotation is provided to highlight these interfaces, it is just a marker though, any <em>SAM</em> interface will work - the annotation simply enforces this at compile time</li>
+							<li>The parameters that the Lambda accepts and returns must match the interface (including exceptions)</li>
+							<li><code>@FunctionalInterface</code> annotation is provided to highlight these interfaces, it is just a marker though, any <em>SAM</em> interface will work - the annotation simply enforces this at compile time</li>
 						</ul>
 						</ul>
 						</br></br>
@@ -223,7 +223,7 @@ private void printMatchingPeople(
 public class PersonOver50Predicate 
                     implements Predicate&lt;Person&gt; {
     public boolean test(Person person) {
-        return person.getAge() >= 50;
+        return person.getAge() > 50;
     }
 }
 
@@ -318,8 +318,6 @@ strings.forEach(x -> System.out.print(x + " "));
 
 					<section>
 						<h2>Lambda Example 4 - More Collections</h2>
-
-						<p>Lambdas make lots of new Collection methods possible...</p>
 
 	          			<div>
 		          			<p>Replace every matching element in the List</p>
@@ -484,7 +482,7 @@ loadsOfPeople.sort(
 								</tr>
 								<tr>
 									<td>an instance method of a <strong>specific</strong> object</td>
-									<td><code class="java">Object::instanceMethodName</code></td> 
+									<td><code class="java">object::instanceMethodName</code></td> 
 								</tr>
 								<tr>
 									<td>an instance method of an <strong>arbitrary</strong> object</td>
@@ -645,7 +643,7 @@ Map&lt;String, Long&gt; letterToNumberOfOccurrences =
 							<li>Pipelining: Akin to the “pipe” command in unix, allowing aggregations to be chained together</li>
 							<li>Automatic optimisation: <em>short-circuiting</em> and <em>lazy</em> processing</li>
 							<li>Can be infinite</li>
-							<li>Can be executed in parallel automatically using <code>parallelStream</code> or <code>paralell()</code></li>
+							<li>Can be executed in parallel automatically using <code>parallelStream</code> or <code>parallel()</code></li>
 						</ul>
 	          			<aside class="notes">
 	          				<ul>
@@ -915,7 +913,7 @@ int combinedAge =
 
 						<pre><code data-trim class="java">
 String xml = 
-  "&lt;people data='lastname'&gt;" +
+  "&lt;people&gt;" +
   loadsOfPeople.stream()
     .map(x -&gt; "&lt;person&gt;"+ x.getName() +"&lt;/person&gt;")
     .reduce("", String::concat) //start with "" 
