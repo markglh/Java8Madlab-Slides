@@ -621,7 +621,7 @@ map(s -> new Integer(s), digits);
 						<div class="fragment fade-in">
 							<p>Imagine writing this manually</p>
 							<pre><code data-trim class="java">
-Stream&lt;String&gt; words = Stream.of("Java", "8", "FTW");
+Stream&lt;String&gt; words=Stream.of("Java", "8", "FTW");
 Map&lt;String, Long&gt; letterToNumberOfOccurrences =
     words.map(w -> w.split(""))
             .flatMap(Arrays::stream)
@@ -859,7 +859,7 @@ List&lt;String&gt; youngerPeopleSortedByIq =
     loadsOfPeople.stream()
         .filter(x -> x.getAge() &lt; 50)
         .sorted(Comparator
-                .comparing(Person::getIq).reversed())
+              .comparing(Person::getIq).reversed())
         .map(Person::getName)
         .collect(Collectors.toList());
 						</code></pre>
@@ -907,7 +907,7 @@ int combinedAge =
 String xml = 
   "&lt;people data='lastname'&gt;" +
   loadsOfPeople.stream()
-    .map(x -&gt; "&lt;person&gt;" + x.getName() + "&lt;/person&gt;")
+    .map(x -&gt; "&lt;person&gt;"+ x.getName() +"&lt;/person&gt;")
     .reduce("", String::concat) //start with "" 
   + "&lt;/people&gt;";
 						</code></pre>
@@ -935,12 +935,12 @@ String xml =
 
 						<pre><code data-trim class="java">
 List&lt;Stream&lt;Person&gt;&gt; clonedPeople = 
-  loadsOfPeople.stream()
-    .map(person -> Stream.of(person, person.dolly()))
-    .collect(Collectors.toList());
+ loadsOfPeople.stream()
+   .map(person -> Stream.of(person, person.dolly()))
+   .collect(Collectors.toList());
 						</code></pre>
 
-						<ol>
+						<ol class="fragment fade-in">
 							<li>map creates a new Stream containing two people</li>
 							<li>This <code>Stream</code>  is then added to the main Stream as-is, leaving us with a pretty useless: <code>List&lt;Stream&lt;Person&gt;&gt;</code></li>
 						</ol>
@@ -1033,9 +1033,9 @@ Map&lt;Integer, List&lt;Person&gt;&gt; peopleGroupedByAge =
 
 						<pre><code data-trim class="java">
 Map&lt;Boolean, List&lt;Person&gt;&gt; peoplePartitionedByAge = 
-  loadsOfPeople.stream().filter(x -> x.getIq() > 110)
-    .collect(Collectors
-              .partitioningBy(x -> x.getAge() > 55));
+ loadsOfPeople.stream().filter(x -> x.getIq() > 110)
+   .collect(Collectors
+             .partitioningBy(x -> x.getAge() > 55));
 						</code></pre>
 
 						<ul>
@@ -1064,7 +1064,7 @@ Map&lt;Integer, Double&gt; peopleGroupedBySexAndAvgAge =
     .filter(x -> x.getIq() > 110)
     .collect(
         Collectors.groupingBy(Person::getAge,
-            Collectors.averagingInt(Person::getIq)));
+           Collectors.averagingInt(Person::getIq)));
 						</code></pre>
 
 						<ul>
