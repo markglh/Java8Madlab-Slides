@@ -752,7 +752,6 @@ R apply(T t, U u);
 
 						<ul>
 							<li>Terminal Operation</li>
-							<li>Normally used on combination with map</li>
 							<li>Takes a <code>Stream</code> of values and repeatedly applies the accumulator to reduce them into a single value</li>
 							<li>The accumulator is passed the total so far (<code>T</code>) and the current element (<code>U</code>)</li>
 							<li>If passed, <code>identity</code> provides the initial value, rather than the first element</li>
@@ -760,6 +759,7 @@ R apply(T t, U u);
 
 	          			<aside class="notes">
 	          				<ul>
+	          					<li>Normally used on combination with map</li>
 	          					<li>More on optional later</li>
 	          					<li>count, min, max, average</li>
 	          					<li>Could use collectors for a lot of reduce aggregations, such as “summing”, or “counting” to count elements</li>
