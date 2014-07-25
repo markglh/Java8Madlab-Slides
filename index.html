@@ -991,7 +991,7 @@ List&lt;Person&gt; clonedPeople2 = loadsOfPeople.stream()
 						<h2>Streams Example 7 - Reduce</h2>
 
 						<pre><code data-trim class="java">
-int youngestUsingReduce = loadsOfPeople.stream()
+int totalAgeUsingReduce = loadsOfPeople.stream()
     .map(Person::getAge)
     .reduce((total, current) -> total + current)
     .get(); //get the result from the Optional
